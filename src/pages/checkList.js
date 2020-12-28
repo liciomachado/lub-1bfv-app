@@ -26,11 +26,12 @@ export default class CheckList extends Component {
 
     componentDidMount = async () => {
         const { maquina, imagemMaquina } = this.props.route.params
-        await this.setState({ item: maquina.checagem, imagemMaquina })
-        //console.log(this.state.item)
+        const res = await axios.get(`${SERVER}/maquina/findbyid/${maquina.id}`)
+        this.setState({item : res.data.checagem})
+        console.log(this.state.item)
 
-        let res = await AsyncStorage.getItem('usuario_logado')
-        const usuario = JSON.parse(res)
+        let u = await AsyncStorage.getItem('usuario_logado')
+        const usuario = JSON.parse(u)
         this.setState({ usuario })
     }
 
@@ -90,7 +91,7 @@ export default class CheckList extends Component {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} key={item.id}>
                                     <CheckBox
                                         key={item.id}
-                                        title={item.item}
+                                        title={`${item.item}    ${item.tempoUltimaTroca}/${item.tempoTroca}`}
                                         checked={item.revisao}
                                         onPress={() => this.onChange(key)}
                                     />

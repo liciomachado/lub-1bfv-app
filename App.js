@@ -2,16 +2,19 @@ import 'react-native-gesture-handler';
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from '@react-navigation/drawer'
 
 import Login from './src/pages/login';
 import Home from './src/pages/home';
 import CheckList from './src/pages/checkList'
 import Finish from './src/pages/finish';
 import Sobre from './src/pages/sobre';
+import DrawerNavigator from './src/components/DrawerNavigator';
 
 const Stack = createStackNavigator();
+const Drawer = createDrawerNavigator();
 
-export default function App() {
+const mainStack = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: true }}>
@@ -20,8 +23,11 @@ export default function App() {
         <Stack.Screen name="CheckList" component={CheckList} />
         <Stack.Screen name="Finish" component={Finish} options={{ headerShown: false }} />
         <Stack.Screen name="Sobre" component={Sobre} />
+        <Stack.Screen name="Drawer" component={DrawerNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
-  );
+  )
 }
+
+export default mainStack
 

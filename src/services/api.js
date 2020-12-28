@@ -1,5 +1,4 @@
 import axios from 'axios'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const SERVER = 'http://10.0.0.105:80/api'
 
