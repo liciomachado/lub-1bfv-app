@@ -9,10 +9,34 @@ import Home from './src/pages/home';
 import CheckList from './src/pages/checkList'
 import Finish from './src/pages/finish';
 import Sobre from './src/pages/sobre';
-import DrawerNavigator from './src/components/DrawerNavigator';
+
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import axios from 'axios'
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
+
+function stacks() {
+  return (
+    <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: true }}>
+      <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+      <Stack.Screen name="Home" component={Home} options={{ headerShown: false, gestureEnabled: false }} />
+      <Stack.Screen name="CheckList" component={CheckList} />
+      <Stack.Screen name="Finish" component={Finish} options={{ headerShown: false }} />
+      <Stack.Screen name="Sobre" component={Sobre} />
+    </Stack.Navigator>
+  )
+}
+
+function logout({ navigation }) {
+  AsyncStorage.removeItem('usuario_logado')
+  AsyncStorage.removeItem('Authorization')
+  delete axios.defaults.headers.common['Authorization']
+  navigation.navigate('Login')
+  return (
+    stacks()
+  )
+}
 
 const mainStack = () => {
   return (
@@ -23,7 +47,6 @@ const mainStack = () => {
         <Stack.Screen name="CheckList" component={CheckList} />
         <Stack.Screen name="Finish" component={Finish} options={{ headerShown: false }} />
         <Stack.Screen name="Sobre" component={Sobre} />
-        <Stack.Screen name="Drawer" component={DrawerNavigator} />
       </Stack.Navigator>
     </NavigationContainer>
   )

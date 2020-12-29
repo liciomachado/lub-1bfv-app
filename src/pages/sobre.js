@@ -4,6 +4,7 @@ import ModalDetails from '../components/ModalDetails'
 import ModalDetailsCheckList from '../components/ModalDetailsCheckList';
 import axios from 'axios'
 import { SERVER } from '../services/api'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default class Sobre extends Component {
 
@@ -50,6 +51,13 @@ export default class Sobre extends Component {
         </View>
     );
 
+    logout = () => {
+        AsyncStorage.removeItem('usuario_logado')
+        AsyncStorage.removeItem('Authorization')
+        delete axios.defaults.headers.common['Authorization']
+        this.props.navigation.navigate('Login')
+    }
+
     render() {
         return (
             <>
@@ -82,11 +90,18 @@ export default class Sobre extends Component {
                                     keyExtractor={checagem => `${checagem.id}`}
                                     renderItem={this.renderItem} />
                             </View>
-                            <Text style={{ fontSize: 18, fontWeight: "bold" }}>{"\n"}Revisões:</Text>
-                            <View>
+                            <View style={{ alignItems: 'center' }}>
+                                <Text style={{ fontSize: 18, fontWeight: "bold" }}>{"\n"}Revisões:</Text>
                                 <FlatList data={this.state.maquina.checklist}
                                     keyExtractor={checagem => `${checagem.id}`}
                                     renderItem={this.renderCheckList} />
+
+                                <TouchableOpacity style={[styles.btnSubmit, { backgroundColor: 'red' }]}
+                                    onPress={() => {
+                                        this.logout()
+                                    }}>
+                                    <Text style={styles.submitText}>Sair</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </KeyboardAvoidingView>
@@ -105,6 +120,19 @@ const styles = StyleSheet.create({
     alinhamento: {
         flex: 1,
         marginLeft: 20,
-        marginRight: 20
+        marginRight: 20,
+    },
+    btnSubmit: {
+        marginTop: 10,
+        backgroundColor: '#35AAFF',
+        width: '80%',
+        height: 40,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 7
+    },
+    submitText: {
+        color: '#fff',
+        fontSize: 18
     },
 })

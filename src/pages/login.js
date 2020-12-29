@@ -32,7 +32,7 @@ export default class Login extends Component {
 
             this.props.navigation.navigate('Home')
         } catch (error) {
-            Alert('Erro :', error)
+            Alert.alert('Erro :', 'Usuário invalido')
         }
     }
 

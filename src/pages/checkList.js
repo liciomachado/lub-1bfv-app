@@ -28,7 +28,6 @@ export default class CheckList extends Component {
         const { maquina, imagemMaquina } = this.props.route.params
         const res = await axios.get(`${SERVER}/maquina/findbyid/${maquina.id}`)
         this.setState({item : res.data.checagem})
-        console.log(this.state.item)
 
         let u = await AsyncStorage.getItem('usuario_logado')
         const usuario = JSON.parse(u)

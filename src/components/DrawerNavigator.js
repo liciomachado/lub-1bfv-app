@@ -9,7 +9,7 @@ const Drawer = createDrawerNavigator();
 
 export default props = () => {
     return (
-        <Drawer.Navigator>
+        <Drawer.Navigator >
             <Drawer.Screen name="Home" component={Home} />
             <Drawer.Screen name="Sobre" component={Sobre} />
         </Drawer.Navigator>

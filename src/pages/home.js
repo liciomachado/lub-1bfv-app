@@ -29,6 +29,8 @@ export default class Home extends Component {
         //console.log(this.state.imagemMaquina)
     }
 
+    
+
     render() {
         return (
             <KeyboardAvoidingView style={styles.background}>
@@ -57,6 +59,8 @@ export default class Home extends Component {
                     }}>
                     <Text style={styles.submitText}>Sobre sua maquina</Text>
                 </TouchableOpacity>
+
+                
 
             </KeyboardAvoidingView>
         )
