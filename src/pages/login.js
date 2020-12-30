@@ -7,32 +7,53 @@ import axios from 'axios'
 
 import imageBackground from '../img/background.png'
 
+const initialParams = {
+    idtMilitar: '0507260479',
+    senha: '123321',
+    nome: '',
+    email: '',
+
+    showSignUp: false,
+}
+
 export default class Login extends Component {
 
     state = {
-        idtMilitar: '0507260479',
-        senha: '123321',
+        ...initialParams
     }
 
-    constructor(){
+    constructor() {
         super();
         this.service = new UsuarioService();
     }
 
-    logar = async () => {
-        try {
-            const res = await this.service.autentica({
+    LoginOrSignUp = async () => {
+        if (this.state.showSignUp) {
+            const res = await this.service.novo({
                 idtMilitar: this.state.idtMilitar,
-                senha: this.state.senha
-            })
-            AsyncStorage.setItem('usuario_logado', JSON.stringify(res.data))
-            AsyncStorage.setItem('Authorization', `Bearer ${res.data.token}`)
+                senha: this.state.senha,
+                nome: this.state.nome,
+                email: this.state.email
+            }).then(
+                Alert.alert('Sucesso', 'Aguarde a confirmação de cadastro em seu email!')
+            )
+            this.setState({ ...initialParams })
 
-            axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`
+        } else {
+            try {
+                const res = await this.service.autentica({
+                    idtMilitar: this.state.idtMilitar,
+                    senha: this.state.senha
+                })
+                AsyncStorage.setItem('usuario_logado', JSON.stringify(res.data))
+                AsyncStorage.setItem('Authorization', `Bearer ${res.data.token}`)
 
-            this.props.navigation.navigate('Home')
-        } catch (error) {
-            Alert.alert('Erro :', 'Usuário invalido')
+                axios.defaults.headers.common['Authorization'] = `Bearer ${res.data.token}`
+
+                this.props.navigation.navigate('Home')
+            } catch (error) {
+                Alert.alert('Erro :', 'Usuário invalido')
+            }
         }
     }
 
@@ -41,7 +62,25 @@ export default class Login extends Component {
         return (
             <ImageBackground source={imageBackground} style={styles.backgroundImage}>
                 <View style={styles.formContainer}>
-                    <Text style={styles.title}>Conecte-se</Text>
+                    {this.state.showSignUp
+                        ? <Text style={styles.title}>Conecte-se</Text>
+                        : <Text style={styles.title}>Cadastre-se</Text>}
+                    {this.state.showSignUp && <TextInput
+                        style={styles.input}
+                        placeholder="Nome"
+                        autoCorrect={false}
+                        value={this.state.nome}
+                        onChangeText={nome => this.setState({ nome })}
+                    />
+                    }
+                    {this.state.showSignUp && <TextInput
+                        style={styles.input}
+                        placeholder="Email"
+                        autoCorrect={false}
+                        value={this.state.email}
+                        onChangeText={email => this.setState({ email })}
+                    />
+                    }
                     <TextInput
                         style={styles.input}
                         placeholder="idtMilitar"
@@ -58,11 +97,14 @@ export default class Login extends Component {
                         onChangeText={senha => this.setState({ senha })}
                     />
                     <TouchableOpacity style={styles.btnSubmit}
-                        onPress={() => { this.logar() }}>
-                        <Text style={styles.submitText}>Acessar</Text>
+                        onPress={() => { this.LoginOrSignUp() }}>
+                        {this.state.showSignUp
+                            ? <Text style={styles.submitText}>Finalizar cadastro</Text>
+                            : <Text style={styles.submitText}>Acessar</Text>}
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnRegister}>
-                        <Text style={styles.registerText}>Criar conta gratuita</Text>
+                    <TouchableOpacity style={styles.btnRegister} onPress={() => { this.setState({ showSignUp: !this.state.showSignUp }) }}>
+                        {!this.state.showSignUp ? <Text style={styles.registerText}>Criar conta gratuita</Text>
+                            : <Text style={styles.registerText}>Voltar</Text>}
                     </TouchableOpacity>
                 </View>
             </ImageBackground>

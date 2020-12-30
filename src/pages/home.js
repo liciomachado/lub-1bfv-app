@@ -63,7 +63,7 @@ export default class Home extends Component {
                     <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh.bind(this)} />
                 }
             >
-                <Text style={styles.h1}>Meu equipamento: {this.state.maquina.nome}</Text>
+                <Text style={styles.h1}>Equipamento: {this.state.maquina.nome}</Text>
 
                 <Text style={[styles.h1, { marginTop: 10 }]}>Ultimo check-list: {this.state.maquina.dataUltimoChecklist}{"\n"}</Text>
 
