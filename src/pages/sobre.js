@@ -41,7 +41,7 @@ export default class Sobre extends Component {
                 <Text>{item.item} - {item.peca}</Text>
             </TouchableOpacity>
         </View>
-    );
+    )
 
     renderCheckList = ({ item }) => (
         <View>
@@ -49,7 +49,7 @@ export default class Sobre extends Component {
                 <Text>{item.data}</Text>
             </TouchableOpacity>
         </View>
-    );
+    )
 
     logout = () => {
         AsyncStorage.removeItem('usuario_logado')
@@ -71,7 +71,7 @@ export default class Sobre extends Component {
                     id={this.state.idShowModalDetais} />
                 }
                 <ScrollView style={{ backgroundColor: '#fff' }}>
-                    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
+                    <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"}>
                         <View style={styles.background}>
                             <Text>Meu equipamento :</Text>
                             <Text>{this.state.maquina.nome}</Text>
@@ -96,7 +96,7 @@ export default class Sobre extends Component {
                                     keyExtractor={checagem => `${checagem.id}`}
                                     renderItem={this.renderCheckList} />
 
-                                <TouchableOpacity style={[styles.btnSubmit, { backgroundColor: 'red' }]}
+                                <TouchableOpacity style={[styles.btnSubmit, { backgroundColor: '#8B0000' }]}
                                     onPress={() => {
                                         this.logout()
                                     }}>

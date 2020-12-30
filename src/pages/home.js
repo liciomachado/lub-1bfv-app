@@ -1,49 +1,81 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity, StyleSheet, KeyboardAvoidingView, Image } from 'react-native';
+import {
+    View,
+    Text,
+    RefreshControl,
+    TouchableOpacity,
+    StyleSheet,
+    KeyboardAvoidingView,
+    Image,
+    ScrollView,
+    Platform
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
 
 import { SERVER } from '../services/api'
 
+const initialParams = {
+    maquina: {},
+    ultimoCheck: '',
+    usuario: {},
+    imagemMaquina: null,
+    trocas: [],
+    refreshing: false
+}
+
 export default class Home extends Component {
 
     state = {
-        maquina: {},
-        ultimoCheck: '',
-        usuario: {},
-        imagemMaquina: null
+        ...initialParams
     }
 
     constructor() {
         super();
     }
 
-    componentDidMount = async () => {
+    buscaDados = async () => {
         let res = await AsyncStorage.getItem('usuario_logado')
         const usuario = JSON.parse(res)
         this.setState({ usuario })
         const maquina = await axios.get(`${SERVER}/maquina/findbyid/${usuario.id}`)
         this.setState({ maquina: maquina.data })
-
         this.setState({ imagemMaquina: 'data:mimetype_attachment; base64,' + this.state.maquina.imagemMaquina })
-        //console.log(this.state.imagemMaquina)
+        this.setState({ trocas: maquina.data.trocas })
     }
 
-    
+    componentDidMount = async () => {
+        await this.buscaDados()
+    }
+
+    _onRefresh() {
+        this.setState({ refreshing: true });
+        this.buscaDados().then(() => {
+            this.setState({ refreshing: false });
+        });
+    }
 
     render() {
         return (
-            <KeyboardAvoidingView style={styles.background}>
-                <Text style={styles.h1}>Meu equipamento :</Text>
-                <Text style={styles.h1}>{this.state.maquina.nome}</Text>
+            <ScrollView
+                contentContainerStyle={styles.background}
+                refreshControl={
+                    <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh.bind(this)} />
+                }
+            >
+                <Text style={styles.h1}>Meu equipamento: {this.state.maquina.nome}</Text>
 
-                <Text style={[styles.h1, { marginTop: 50 }]}>Ultimo check-list :</Text>
-                <Text style={styles.h1}>{this.state.maquina.dataUltimoChecklist}{"\n"}</Text>
+                <Text style={[styles.h1, { marginTop: 10 }]}>Ultimo check-list: {this.state.maquina.dataUltimoChecklist}{"\n"}</Text>
 
-                <Text style={[styles.h1, { color: 'red', textAlign: 'center' }]}>Falta 15 horas para vencer seu Oleo lubrificante</Text>
+                <View style={styles.margem}>
+                    {this.state.trocas.map((troca, index) =>
+                        <Text key={index} style={{ color: 'red', textAlign: 'justify', marginBottom: 10 }}>* {troca}</Text>
+                    )}
+                </View>
 
-                <View style={styles.containerLogo}>
-                    <Image source={{ uri: this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} />
+                <View>
+                    <Image source={require('../img/escavadeira.jpg')} style={{ width: 300, height: 200 }} />
+                    {/* <Image source={{ uri: this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} /> */}
                 </View>
 
                 <TouchableOpacity style={styles.btnSubmit}
@@ -59,19 +91,20 @@ export default class Home extends Component {
                     }}>
                     <Text style={styles.submitText}>Sobre sua maquina</Text>
                 </TouchableOpacity>
-
-                
-
-            </KeyboardAvoidingView>
+            </ScrollView >
         )
     }
 }
 const styles = StyleSheet.create({
+    scrollView: {
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
     background: {
         flex: 1,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: '#fff'
     },
     btnSubmit: {
         marginTop: 10,
@@ -89,5 +122,9 @@ const styles = StyleSheet.create({
     h1: {
         fontSize: 18,
         fontWeight: "bold",
+    },
+    margem: {
+        marginLeft: 45,
+        marginRight: 45
     }
 });

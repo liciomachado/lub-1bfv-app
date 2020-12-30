@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import { Modal, Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, FlatList } from 'react-native'
-import { ScrollView } from 'react-native-gesture-handler'
 import axios from 'axios'
 import { SERVER } from '../services/api'
 export default class ModalDetailsCheckList extends Component {
@@ -20,7 +19,7 @@ export default class ModalDetailsCheckList extends Component {
             <Text>Peça: {item.item}</Text>
             <Text>Tempo utilizado: {item.tempoUltimaTroca}/{item.tempoTroca}{"\n"}</Text>
         </View>
-    );
+    )
 
     render() {
         return (
@@ -33,6 +32,8 @@ export default class ModalDetailsCheckList extends Component {
                 </TouchableWithoutFeedback>
                 <View style={styles.container}>
                     <Text style={styles.header}>Revisão : {this.state.checklist.data}</Text>
+
+                    <Text style={{textAlign: 'center', marginTop: 20}}>Horimetro na checagem : {this.state.checklist.horimetro}</Text>
                     <View style={styles.modal}>
                         <FlatList data={this.state.checklist.checagem}
                             keyExtractor={checagem => `${checagem.id}`}
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
     modal: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 40,
+        marginTop: 20,
         flex: 1
     }
 })
