@@ -103,8 +103,12 @@ export default class Login extends Component {
                             : <Text style={styles.submitText}>Acessar</Text>}
                     </TouchableOpacity>
                     <TouchableOpacity style={styles.btnRegister} onPress={() => { this.setState({ showSignUp: !this.state.showSignUp }) }}>
-                        {!this.state.showSignUp ? <Text style={styles.registerText}>Criar conta gratuita</Text>
-                            : <Text style={styles.registerText}>Voltar</Text>}
+                        {this.state.showSignUp
+                            ? <Text style={styles.registerText}>Voltar</Text>
+                            : <Text style={styles.registerText}>Criar conta gratuita</Text>}
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.btnRegister} onPress={() => { this.props.navigation.navigate('NewMaquina') }}>
+                        <Text style={styles.registerText}>Manutenção</Text>
                     </TouchableOpacity>
                 </View>
             </ImageBackground>

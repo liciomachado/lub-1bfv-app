@@ -5,10 +5,8 @@ import {
     RefreshControl,
     TouchableOpacity,
     StyleSheet,
-    KeyboardAvoidingView,
     Image,
     ScrollView,
-    Platform
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
@@ -74,8 +72,8 @@ export default class Home extends Component {
                 </View>
 
                 <View>
-                    <Image source={require('../img/escavadeira.jpg')} style={{ width: 300, height: 200 }} />
-                    {/* <Image source={{ uri: this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} /> */}
+                    {/* <Image source={require('../img/escavadeira.jpg')} style={{ width: 300, height: 200 }} /> */}
+                    <Image source={{ uri: this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} />
                 </View>
 
                 <TouchableOpacity style={styles.btnSubmit}
@@ -90,6 +88,9 @@ export default class Home extends Component {
                         this.props.navigation.navigate("Sobre", { maquina: this.state.maquina, imagemMaquina: this.state.imagemMaquina });
                     }}>
                     <Text style={styles.submitText}>Sobre sua maquina</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.btnRegister} onPress={() => { this.props.navigation.navigate('NewMaquina') }}>
+                    <Text style={styles.registerText}>Manutenção</Text>
                 </TouchableOpacity>
             </ScrollView >
         )

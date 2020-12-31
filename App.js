@@ -9,6 +9,8 @@ import Home from './src/pages/home';
 import CheckList from './src/pages/checkList'
 import Finish from './src/pages/finish';
 import Sobre from './src/pages/sobre';
+import NewMaquina from './src/pages/NewMaquina';
+import CameraView from './src/components/CameraView';
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
@@ -47,6 +49,8 @@ const mainStack = () => {
         <Stack.Screen name="CheckList" component={CheckList} />
         <Stack.Screen name="Finish" component={Finish} options={{ headerShown: false }} />
         <Stack.Screen name="Sobre" component={Sobre} />
+        <Stack.Screen name="Camera" component={CameraView} />
+        <Stack.Screen name="NewMaquina" component={NewMaquina} options={{title: 'Nova Maquina'}}/>
       </Stack.Navigator>
     </NavigationContainer>
   )
