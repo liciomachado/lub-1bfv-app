@@ -36,10 +36,15 @@ export default class Home extends Component {
         let res = await AsyncStorage.getItem('usuario_logado')
         const usuario = JSON.parse(res)
         this.setState({ usuario })
-        const maquina = await axios.get(`${SERVER}/maquina/findbyid/${usuario.id}`)
-        this.setState({ maquina: maquina.data })
-        this.setState({ imagemMaquina: 'data:mimetype_attachment; base64,' + this.state.maquina.imagemMaquina })
-        this.setState({ trocas: maquina.data.trocas })
+        try {
+            const maquina = await axios.get(`${SERVER}/maquina/findbyid/${usuario.id}`)
+            this.setState({ maquina: maquina.data })
+            this.setState({ imagemMaquina: 'data:mimetype_attachment; base64,' + this.state.maquina.imagemMaquina })
+            this.setState({ trocas: maquina.data.trocas })
+        } catch (error) {
+            console.log(error.response.data)
+            this.props.navigation.navigate('NewMaquina')
+        }
     }
 
     componentDidMount = async () => {
@@ -60,7 +65,7 @@ export default class Home extends Component {
                 refreshControl={
                     <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh.bind(this)} />
                 }
-            >
+            >   
                 <Text style={styles.h1}>Equipamento: {this.state.maquina.nome}</Text>
 
                 <Text style={[styles.h1, { marginTop: 10 }]}>Ultimo check-list: {this.state.maquina.dataUltimoChecklist}{"\n"}</Text>

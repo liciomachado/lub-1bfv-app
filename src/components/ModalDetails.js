@@ -19,7 +19,7 @@ export default class ModalDetails extends Component {
         return (
             <Modal transparent={true}
                 visible={this.props.isVisible}
-                onRequestClose={this.props.onCancel}
+                onRequestClose={this.props.onCancel} 
                 animationType='slide'>
                 <TouchableWithoutFeedback onPress={this.props.onCancel}>
                     <View style={styles.background} />

@@ -63,8 +63,8 @@ export default class Login extends Component {
             <ImageBackground source={imageBackground} style={styles.backgroundImage}>
                 <View style={styles.formContainer}>
                     {this.state.showSignUp
-                        ? <Text style={styles.title}>Conecte-se</Text>
-                        : <Text style={styles.title}>Cadastre-se</Text>}
+                        ? <Text style={styles.title}>Cadastre-se</Text>
+                        : <Text style={styles.title}>Conecte-se</Text>}
                     {this.state.showSignUp && <TextInput
                         style={styles.input}
                         placeholder="Nome"
@@ -106,9 +106,6 @@ export default class Login extends Component {
                         {this.state.showSignUp
                             ? <Text style={styles.registerText}>Voltar</Text>
                             : <Text style={styles.registerText}>Criar conta gratuita</Text>}
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.btnRegister} onPress={() => { this.props.navigation.navigate('NewMaquina') }}>
-                        <Text style={styles.registerText}>Manutenção</Text>
                     </TouchableOpacity>
                 </View>
             </ImageBackground>

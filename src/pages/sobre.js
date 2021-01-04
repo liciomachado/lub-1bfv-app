@@ -45,7 +45,7 @@ export default class Sobre extends Component {
 
     renderCheckList = ({ item }) => (
         <View>
-            <TouchableOpacity onPress={() => { this.changeIdDetails(item.id) }}>
+            <TouchableOpacity onPress={() => { this.changeIdDetails(item.id) }}> 
                 <Text>{item.data}</Text>
             </TouchableOpacity>
         </View>

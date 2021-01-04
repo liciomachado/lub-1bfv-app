@@ -28,8 +28,8 @@ export default class CameraView extends Component {
     takePicture = async () => {
         if (this.camera) {
             let photo = await this.camera.takePictureAsync();
-            console.log(photo)
             this.props.navigation.navigate('NewMaquina', {imagemMaquina : photo.base64})
+            this.props.route.params.onGoBack()
         }
     }
     render() {

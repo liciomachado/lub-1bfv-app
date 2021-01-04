@@ -1,9 +1,8 @@
 import React, { Component } from 'react'
-import { Text, Image, TextInput, StyleSheet, TouchableOpacity,Alert } from 'react-native'
-import { Camera } from 'expo-camera'
-import * as Permissions from 'expo-permissions';
+import { Text, Image, TextInput, StyleSheet, TouchableOpacity, Alert } from 'react-native'
 import axios from 'axios'
 import { SERVER } from '../services/api'
+import ModalPicker from '../components/ModalPicker'
 
 export default class NewMaquina extends Component {
 
@@ -11,16 +10,17 @@ export default class NewMaquina extends Component {
         nome: '',
         descricao: '',
         horimetro: '',
+        usuario: [],
         imagemMaquina: [],
-        mostraImagemMaquina: null, 
+        showModal: false,
+        mostraImagemMaquina: this.props.route.params?.imagemMaquina || null,
 
-        hasPermission: true,
-        type: Camera.Constants.Type.back
     }
 
     async componentDidMount() {
-        const { status } = await Permissions.askAsync(Permissions.CAMERA);
-        this.setState({ hasPermission: status === 'granted' });
+        const res = await axios.get(`${SERVER}/usuario/findall`)
+        this.setState({usuario: res.data})
+        console.warn(res.data)
     }
 
     saveMaquina = async () => {
@@ -33,15 +33,20 @@ export default class NewMaquina extends Component {
         }
     }
 
-    atualizaImagem = async() => {
-        await this.setState({ mostraImagemMaquina: this.props.route.params.imagemMaquina || null })
+    atualizaImagem = async () => {
+        await this.setState({ mostraImagemMaquina: this.props.route.params?.imagemMaquina || null })
         const res = this.state.mostraImagemMaquina.replace('data:image/png;base64,', '')
-        this.setState({imagemMaquina: res})
+        this.setState({ imagemMaquina: res })
     }
 
     render() {
         return (
             <>
+                {this.state.showModal && <ModalPicker isVisible={this.state.showModal}
+                    data={this.state.usuario}
+                    onCancel={() => this.setState({ showModal: false })}
+                />
+                }
                 <TextInput
                     style={styles.input}
                     placeholder="Nome"
@@ -64,13 +69,10 @@ export default class NewMaquina extends Component {
                     value={this.state.horimetro}
                     onChangeText={horimetro => this.setState({ horimetro })}
                 />
-                <Image source={{ uri: this.state.mostraImagemMaquina }} style={{ width: '100%', height: 200, backgroundColor: '#fea', resizeMode: 'contain' }} />
 
-                <TouchableOpacity style={styles.btnSubmit} onPress={() => { this.props.navigation.navigate('Camera') }}>
-                    <Text style={styles.submitText}>Camera</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.btnSubmit} onPress={() => { this.atualizaImagem() }}>
-                    <Text style={styles.submitText}>Atualizar</Text>
+                <TouchableOpacity onPress={() => { this.props.navigation.navigate('Camera', { onGoBack: () => this.atualizaImagem() }) }}>
+                    <Text style={{ textAlign: 'center' }}>{"\n"}Imagem da maquina</Text>
+                    <Image source={{ uri: this.state.mostraImagemMaquina }} style={{ width: '100%', height: 200, backgroundColor: '#fea' }} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.btnSubmit} onPress={() => { this.saveMaquina() }}>
@@ -96,7 +98,8 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         borderRadius: 7,
         width: '100%',
-        padding: 8
+        padding: 8,
+        marginTop: 10
     },
     submitText: {
         color: '#fff',
