@@ -3,6 +3,7 @@ import { Text, Image, TextInput, StyleSheet, TouchableOpacity, Alert } from 'rea
 import axios from 'axios'
 import { SERVER } from '../services/api'
 import ModalPicker from '../components/ModalPicker'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default class NewMaquina extends Component {
 
@@ -10,17 +11,18 @@ export default class NewMaquina extends Component {
         nome: '',
         descricao: '',
         horimetro: '',
-        usuario: [],
+        usuario: {},
         imagemMaquina: [],
         showModal: false,
         mostraImagemMaquina: this.props.route.params?.imagemMaquina || null,
 
     }
 
-    async componentDidMount() {
-        const res = await axios.get(`${SERVER}/usuario/findall`)
-        this.setState({usuario: res.data})
-        console.warn(res.data)
+    componentDidMount = async() => {
+        let res = await AsyncStorage.getItem('usuario_logado')
+        const usuario = JSON.parse(res)
+        this.setState({ usuario })
+        console.log(usuario)
     }
 
     saveMaquina = async () => {
@@ -31,6 +33,7 @@ export default class NewMaquina extends Component {
         } catch (error) {
             Alert.alert("Erro", error)
         }
+        this.props.navigation.navigate('Home')
     }
 
     atualizaImagem = async () => {

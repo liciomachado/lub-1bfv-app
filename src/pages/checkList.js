@@ -25,13 +25,14 @@ export default class CheckList extends Component {
     }
 
     componentDidMount = async () => {
-        const { maquina, imagemMaquina } = this.props.route.params
-        const res = await axios.get(`${SERVER}/maquina/findbyid/${maquina.id}`)
-        this.setState({item : res.data.checagem})
-
         let u = await AsyncStorage.getItem('usuario_logado')
         const usuario = JSON.parse(u)
         this.setState({ usuario })
+
+        const { maquina, imagemMaquina } = this.props.route.params
+        const res = await axios.get(`${SERVER}/maquina/findbyid/${usuario.id}`)
+        this.setState({item : res.data.checagem})
+
     }
 
     onChange = (key) => {

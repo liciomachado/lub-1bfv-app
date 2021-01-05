@@ -30,7 +30,7 @@ export default class Sobre extends Component {
     }
 
     componentDidMount = async () => {
-        const res = await axios.get(`${SERVER}/maquina/findbyid/${this.props.route.params.maquina.id}`)
+        const res = await axios.get(`${SERVER}/maquina/findbyid/${this.props.route.params.id}`)
         const maquina = res.data
         this.setState({ maquina })
     }

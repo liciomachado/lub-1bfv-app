@@ -65,7 +65,7 @@ export default class Home extends Component {
                 refreshControl={
                     <RefreshControl refreshing={this.state.refreshing} onRefresh={this._onRefresh.bind(this)} />
                 }
-            >   
+            >
                 <Text style={styles.h1}>Equipamento: {this.state.maquina.nome}</Text>
 
                 <Text style={[styles.h1, { marginTop: 10 }]}>Ultimo check-list: {this.state.maquina.dataUltimoChecklist}{"\n"}</Text>
@@ -90,13 +90,15 @@ export default class Home extends Component {
 
                 <TouchableOpacity style={styles.btnSubmit}
                     onPress={() => {
-                        this.props.navigation.navigate("Sobre", { maquina: this.state.maquina, imagemMaquina: this.state.imagemMaquina });
+                        this.props.navigation.navigate("Sobre", { id: this.state.usuario.id, imagemMaquina: this.state.imagemMaquina });
                     }}>
                     <Text style={styles.submitText}>Sobre sua maquina</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.btnRegister} onPress={() => { this.props.navigation.navigate('NewMaquina') }}>
-                    <Text style={styles.registerText}>Manutenção</Text>
-                </TouchableOpacity>
+                {this.state.maquina &&
+                    <TouchableOpacity style={styles.btnRegister} onPress={() => { this.props.navigation.navigate('NewMaquina') }}>
+                        <Text style={styles.registerText}>Manutenção</Text>
+                    </TouchableOpacity>
+                }
             </ScrollView >
         )
     }
