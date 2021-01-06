@@ -73,7 +73,7 @@ export default class NewMaquina extends Component {
                     onChangeText={horimetro => this.setState({ horimetro })}
                 />
 
-                <TouchableOpacity onPress={() => { this.props.navigation.navigate('Camera', { onGoBack: () => this.atualizaImagem() }) }}>
+                <TouchableOpacity onPress={() => { this.props.navigation.navigate('Camera', { onGoBack: () => this.atualizaImagem(), previousScreen: 'NewMaquina' }) }}>
                     <Text style={{ textAlign: 'center' }}>{"\n"}Imagem da maquina</Text>
                     <Image source={{ uri: this.state.mostraImagemMaquina }} style={{ width: '100%', height: 200, backgroundColor: '#fea' }} />
                 </TouchableOpacity>

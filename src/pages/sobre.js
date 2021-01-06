@@ -15,8 +15,8 @@ export default class Sobre extends Component {
         showModalDetails: false,
         idShowModalDetais: 0,
         maquina: {},
-        imagemMaquina: null,
-        checkLists: {}
+        checkLists: {},
+        imagemMaquina: ""
     }
 
     changeId = async (id) => {
@@ -30,7 +30,10 @@ export default class Sobre extends Component {
     }
 
     componentDidMount = async () => {
+        let img = ''
         const res = await axios.get(`${SERVER}/maquina/findbyid/${this.props.route.params.id}`)
+        img = res.data.imagemMaquina
+        this.setState({imagemMaquina: img})
         const maquina = res.data
         this.setState({ maquina })
     }
@@ -38,14 +41,14 @@ export default class Sobre extends Component {
     renderItem = ({ item }) => (
         <View>
             <TouchableOpacity onPress={() => { this.changeId(item.id) }}>
-                <Text>{item.item} - {item.peca}</Text>
+                <Text>{item.item} - {item.peca} </Text>
             </TouchableOpacity>
         </View>
     )
 
     renderCheckList = ({ item }) => (
         <View>
-            <TouchableOpacity onPress={() => { this.changeIdDetails(item.id) }}> 
+            <TouchableOpacity onPress={() => { this.changeIdDetails(item.id) }}>
                 <Text>{item.data}</Text>
             </TouchableOpacity>
         </View>
@@ -63,22 +66,22 @@ export default class Sobre extends Component {
             <>
                 {this.state.showModal && <ModalDetails isVisible={this.state.showModal}
                     onCancel={() => this.setState({ showModal: false })}
-                    id={this.state.idShowModal} />
+                    id={this.state.idShowModal}
+                    navigation={this.props.navigation} />
                 }
 
                 {this.state.showModalDetails && <ModalDetailsCheckList isVisible={this.state.showModalDetails}
                     onCancel={() => this.setState({ showModalDetails: false })}
                     id={this.state.idShowModalDetais} />
                 }
-                <ScrollView style={{ backgroundColor: '#fff' }}>
+                <ScrollView style={{ backgroundColor: '#fff' }} >
                     <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"}>
                         <View style={styles.background}>
                             <Text>Meu equipamento :</Text>
                             <Text>{this.state.maquina.nome}</Text>
 
                             <View style={styles.containerLogo}>
-                                <Image source={require('../img/escavadeira.jpg')} style={{ width: 300, height: 200 }} />
-                                {/* <Image source={{ uri: 'data:mimetype_attachment; base64,' + this.state.imagemMaquina, cache: 'reload' }} style={{ width: 300, height: 200 }} /> */}
+                                <Image source={{ uri: "data:image/png;base64,"+this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} />
                             </View>
 
                         </View>
@@ -96,11 +99,11 @@ export default class Sobre extends Component {
                                     keyExtractor={checagem => `${checagem.id}`}
                                     renderItem={this.renderCheckList} />
 
-                                <TouchableOpacity style={[styles.btnSubmit, { backgroundColor: '#8B0000' }]}
+                                <TouchableOpacity
                                     onPress={() => {
                                         this.logout()
                                     }}>
-                                    <Text style={styles.submitText}>Sair</Text>
+                                    <Text style={[styles.submitText, { color: 'red' }]}>Sair</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>

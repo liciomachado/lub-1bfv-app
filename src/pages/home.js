@@ -17,7 +17,7 @@ const initialParams = {
     maquina: {},
     ultimoCheck: '',
     usuario: {},
-    imagemMaquina: null,
+    imagemMaquina: "",
     trocas: [],
     refreshing: false
 }
@@ -27,19 +27,22 @@ export default class Home extends Component {
     state = {
         ...initialParams
     }
-
-    constructor() {
-        super();
+    
+    constructor(props) {
+        super(props);
+        console.log(this.props)
     }
 
     buscaDados = async () => {
+        let img = ''
         let res = await AsyncStorage.getItem('usuario_logado')
         const usuario = JSON.parse(res)
         this.setState({ usuario })
         try {
             const maquina = await axios.get(`${SERVER}/maquina/findbyid/${usuario.id}`)
             this.setState({ maquina: maquina.data })
-            this.setState({ imagemMaquina: 'data:mimetype_attachment; base64,' + this.state.maquina.imagemMaquina })
+            img = maquina.data.imagemMaquina
+            this.setState({imagemMaquina: img})
             this.setState({ trocas: maquina.data.trocas })
         } catch (error) {
             console.log(error.response.data)
@@ -77,8 +80,7 @@ export default class Home extends Component {
                 </View>
 
                 <View>
-                    {/* <Image source={require('../img/escavadeira.jpg')} style={{ width: 300, height: 200 }} /> */}
-                    <Image source={{ uri: this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} />
+                    <Image source={{ uri: "data:image/png;base64,"+this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} />
                 </View>
 
                 <TouchableOpacity style={styles.btnSubmit}
@@ -94,9 +96,14 @@ export default class Home extends Component {
                     }}>
                     <Text style={styles.submitText}>Sobre sua maquina</Text>
                 </TouchableOpacity>
-                {this.state.maquina &&
+                {!this.state.maquina &&
                     <TouchableOpacity style={styles.btnRegister} onPress={() => { this.props.navigation.navigate('NewMaquina') }}>
                         <Text style={styles.registerText}>Manutenção</Text>
+                    </TouchableOpacity>
+                }
+                {this.state.maquina &&
+                    <TouchableOpacity style={styles.btnRegister} onPress={() => { this.props.navigation.navigate('NewCheck') }}>
+                        <Text style={styles.registerText}>Novo Item de checagem</Text>
                     </TouchableOpacity>
                 }
             </ScrollView >

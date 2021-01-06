@@ -25,13 +25,17 @@ export default class CameraView extends Component {
                     : Camera.Constants.Type.back
         })
     }
+    
     takePicture = async () => {
         if (this.camera) {
-            let photo = await this.camera.takePictureAsync();
-            this.props.navigation.navigate('NewMaquina', {imagemMaquina : photo.base64})
+            let photo = await this.camera.takePictureAsync({
+                base64: true,
+            });
+            this.props.navigation.navigate(this.props.route.params?.previousScreen, {imagemMaquina : photo.base64})
             this.props.route.params.onGoBack()
         }
     }
+
     render() {
         const { hasPermission } = this.state
         if (hasPermission === null) {

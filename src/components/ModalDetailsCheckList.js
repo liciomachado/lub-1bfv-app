@@ -9,7 +9,7 @@ export default class ModalDetailsCheckList extends Component {
     }
 
     componentDidMount = async () => {
-        id = parseInt(this.props.id)
+        const id = parseInt(this.props.id)
         const res = await axios.get(`${SERVER}/checklist/findbyid/${id}`)
         this.setState({ checklist: res.data })
     }

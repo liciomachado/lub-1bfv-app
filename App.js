@@ -11,6 +11,7 @@ import Finish from './src/pages/finish';
 import Sobre from './src/pages/sobre';
 import NewMaquina from './src/pages/NewMaquina';
 import CameraView from './src/components/CameraView';
+import NewCheck from './src/pages/NewCheck';
 
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import axios from 'axios'
@@ -51,6 +52,7 @@ const mainStack = () => {
         <Stack.Screen name="Sobre" component={Sobre} />
         <Stack.Screen name="Camera" component={CameraView} />
         <Stack.Screen name="NewMaquina" component={NewMaquina} options={{title: 'Nova Maquina'}}/>
+        <Stack.Screen name="NewCheck" component={NewCheck} options={{title: 'Nova Checagem'}}/>
       </Stack.Navigator>
     </NavigationContainer>
   )

@@ -1,6 +1,7 @@
 import axios from 'axios'
 
-    const SERVER = 'http://10.0.0.111:80/api'
+    const SERVER = 'http://10.0.0.102:80/api'
+    //const SERVER = 'http://localhost:80/api'
     //const SERVER = 'http://172.20.10.2:80/api'
 
 const httpClient = axios.create({

@@ -53,7 +53,6 @@ export default class CheckList extends Component {
                 usuario: this.state.usuario.id,
                 horimetro: this.state.horimetro
             })
-            console.log(res.data)
             this.props.navigation.navigate('Finish')
         } catch (error) {
             alert(error)
@@ -91,7 +90,7 @@ export default class CheckList extends Component {
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }} key={item.id}>
                                     <CheckBox
                                         key={item.id}
-                                        title={`${item.item}    ${item.tempoUltimaTroca}/${item.tempoTroca}`}
+                                        title={`${item.item} ${item.tempoUltimaTroca}/${item.tempoTroca}`}
                                         checked={item.revisao}
                                         onPress={() => this.onChange(key)}
                                     />
