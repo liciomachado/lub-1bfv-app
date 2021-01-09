@@ -7,6 +7,7 @@ import { SERVER } from '../services/api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export default class Sobre extends Component {
+    _isMounted = false;
 
     state = {
         showModal: false,
@@ -29,14 +30,21 @@ export default class Sobre extends Component {
         await this.setState({ showModalDetails: true })
     }
 
-    componentDidMount = async () => {
+    componentDidMount = () => {
+        this._isMounted = true;
+
         let img = ''
-        const res = await axios.get(`${SERVER}/maquina/findbyid/${this.props.route.params.id}`)
-        img = res.data.imagemMaquina
-        this.setState({imagemMaquina: img})
-        const maquina = res.data
-        this.setState({ maquina })
+        axios.get(`${SERVER}/maquina/findbyid/${this.props.route.params.id}`).then(res => {
+            img = res.data.imagemMaquina
+            this.setState({imagemMaquina: img})
+            const maquina = res.data
+            this.setState({ maquina })
+        })
     }
+
+    componentWillUnmount() {
+        this._isMounted = false;
+      }
 
     renderItem = ({ item }) => (
         <View>

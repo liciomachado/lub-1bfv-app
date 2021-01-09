@@ -26,11 +26,13 @@ export default class NewCheck extends Component {
         this.setState({ maquina: maquina.data })
 
         //ATUALIZA CHECAGEM
-        const id = this.props.route.params?.id || 0
-        const checagem = await axios.get(`${SERVER}/checagem/findbyid/${id}`)
-        this.setState({ ...checagem.data })
-        img = checagem.data.imagemTroca
-        this.setState({mostraImagemMaquina: img})
+        if(this.props.route.params?.id != 0) {
+            const id = this.props.route.params?.id || 0
+            const checagem = await axios.get(`${SERVER}/checagem/findbyid/${id}`)
+            this.setState({ ...checagem.data })
+            img = checagem.data.imagemTroca
+            this.setState({imagemTroca: img})
+        }
     }
 
     saveOrUpdate = async () => {
@@ -51,9 +53,9 @@ export default class NewCheck extends Component {
     }
 
     atualizaImagem = async () => {
-        await this.setState({ mostraImagemMaquina: this.props.route.params?.imagemMaquina || null })
-        const res = this.state.mostraImagemMaquina.replace('data:image/png;base64,', '')
-        this.setState({ imagemTroca: res })
+        await this.setState({ imagemTroca: this.props.route.params?.imagemMaquina || null })
+        //const res = this.state.mostraImagemMaquina.replace('data:image/png;base64,', '')
+        //this.setState({ imagemTroca:  })
     }
 
     render() {
@@ -93,7 +95,7 @@ export default class NewCheck extends Component {
 
                 <TouchableOpacity onPress={() => { this.props.navigation.navigate('Camera', { onGoBack: () => this.atualizaImagem(), previousScreen: 'NewCheck' }) }}>
                     <Text style={{ textAlign: 'center' }}>{"\n"}Imagem da peça</Text>
-                    <Image source={{ uri: "data:image/png;base64,"+this.state.mostraImagemMaquina }} style={{ width: '100%', height: 200, backgroundColor: '#fea' }} />
+                    <Image source={{ uri: "data:image/png;base64,"+this.state.imagemTroca }} style={{ width: '100%', height: 200, backgroundColor: '#fea' }} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.btnSubmit} onPress={() => { this.saveOrUpdate() }}>

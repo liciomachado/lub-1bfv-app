@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Modal, Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, FlatList } from 'react-native'
+import { Modal, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View, FlatList } from 'react-native'
 import axios from 'axios'
 import { SERVER } from '../services/api'
 export default class ModalDetailsCheckList extends Component {

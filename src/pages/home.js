@@ -23,14 +23,14 @@ const initialParams = {
 }
 
 export default class Home extends Component {
+    _isMounted = false;
 
     state = {
         ...initialParams
     }
-    
+
     constructor(props) {
         super(props);
-        console.log(this.props)
     }
 
     buscaDados = async () => {
@@ -38,20 +38,30 @@ export default class Home extends Component {
         let res = await AsyncStorage.getItem('usuario_logado')
         const usuario = JSON.parse(res)
         this.setState({ usuario })
-        try {
-            const maquina = await axios.get(`${SERVER}/maquina/findbyid/${usuario.id}`)
-            this.setState({ maquina: maquina.data })
-            img = maquina.data.imagemMaquina
-            this.setState({imagemMaquina: img})
-            this.setState({ trocas: maquina.data.trocas })
-        } catch (error) {
-            console.log(error.response.data)
-            this.props.navigation.navigate('NewMaquina')
-        }
+
+
+
+        axios.get(`${SERVER}/maquina/findbyid/${usuario.id}`)
+            .then(result => {
+                this.setState({ maquina: result.data })
+                img = result.data.imagemMaquina
+                this.setState({ imagemMaquina: img })
+                this.setState({ trocas: result.data.trocas })
+            })
+            .catch(error => {
+                console.log(error.response)
+                this.props.navigation.navigate('NewMaquina')
+            })
+
     }
 
     componentDidMount = async () => {
+        this._isMounted = true;
         await this.buscaDados()
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     _onRefresh() {
@@ -80,7 +90,7 @@ export default class Home extends Component {
                 </View>
 
                 <View>
-                    <Image source={{ uri: "data:image/png;base64,"+this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} />
+                    <Image source={{ uri: "data:image/png;base64," + this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} />
                 </View>
 
                 <TouchableOpacity style={styles.btnSubmit}

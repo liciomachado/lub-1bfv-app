@@ -11,12 +11,12 @@ export default class CheckList extends Component {
 
     state = {
         item: [],
-        imagemMaquina: null,
+        imagemMaquina: '',
         horimetro: '',
 
         usuario: {},
         showModal: false,
-        idShowModal: 1,
+        idShowModal: 2,
     }
 
     changeId = async (id) => {
@@ -25,13 +25,13 @@ export default class CheckList extends Component {
     }
 
     componentDidMount = async () => {
+        let img = ''
         let u = await AsyncStorage.getItem('usuario_logado')
         const usuario = JSON.parse(u)
         this.setState({ usuario })
-
-        const { maquina, imagemMaquina } = this.props.route.params
         const res = await axios.get(`${SERVER}/maquina/findbyid/${usuario.id}`)
-        this.setState({item : res.data.checagem})
+        img = res.data.imagemMaquina
+        this.setState({ item: res.data.checagem, imagemMaquina: img })
 
     }
 
@@ -73,7 +73,7 @@ export default class CheckList extends Component {
                             <Text>Escavadeira ES-25</Text>
                             <TouchableOpacity>
                                 <View style={styles.containerLogo}>
-                                    <Image source={require('../img/escavadeira.jpg')} style={{ width: 300, height: 200 }} />
+                                    <Image source={{ uri: "data:image/png;base64," + this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} />
                                 </View>
                             </TouchableOpacity>
                         </View>
