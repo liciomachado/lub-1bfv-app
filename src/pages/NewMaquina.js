@@ -8,37 +8,45 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 export default class NewMaquina extends Component {
 
     state = {
+        id: '',
         nome: '',
         descricao: '',
         horimetro: '',
         usuario: {},
-        imagemMaquina: [],
+        imagemMaquina: '',
         showModal: false,
-        mostraImagemMaquina: this.props.route.params?.imagemMaquina || null,
-
     }
 
-    componentDidMount = async() => {
+    componentDidMount = async () => {
         let res = await AsyncStorage.getItem('usuario_logado')
         const usuario = JSON.parse(res)
         this.setState({ usuario })
-        console.log(usuario)
+
+        if (this.props.route.params?.maquina) {
+            this.setState({ ...this.props.route.params?.maquina })
+        }
     }
 
-    saveMaquina = async () => {
+    saveOrUpdateMaquina = async () => {
         try {
-            const res = await axios.post(`${SERVER}/maquina/save`, {
-                ...this.state
-            })
+            if(this.state.id != 0) {
+                const res = await axios.put(`${SERVER}/maquina/update`, {
+                    ...this.state
+                }) 
+            } else {
+                const res = await axios.post(`${SERVER}/maquina/save`, {
+                    ...this.state
+                })
+            }
         } catch (error) {
             Alert.alert("Erro", error)
         }
         this.props.navigation.navigate('Home')
     }
 
-    atualizaImagem = async () => {
-        await this.setState({ mostraImagemMaquina: this.props.route.params?.imagemMaquina || null })
-        const res = this.state.mostraImagemMaquina.replace('data:image/png;base64,', '')
+    updateImage = async () => {
+        await this.setState({ imagemMaquina: this.props.route.params?.imagemMaquina || null })
+        const res = this.state.imagemMaquina.replace('data:image/png;base64,', '')
         this.setState({ imagemMaquina: res })
     }
 
@@ -73,13 +81,17 @@ export default class NewMaquina extends Component {
                     onChangeText={horimetro => this.setState({ horimetro })}
                 />
 
-                <TouchableOpacity onPress={() => { this.props.navigation.navigate('Camera', { onGoBack: () => this.atualizaImagem(), previousScreen: 'NewMaquina' }) }}>
+                <TouchableOpacity onPress={() => { this.props.navigation.navigate('Camera', { onGoBack: () => this.updateImage(), previousScreen: 'NewMaquina' }) }}>
                     <Text style={{ textAlign: 'center' }}>{"\n"}Imagem da maquina</Text>
-                    <Image source={{ uri: this.state.mostraImagemMaquina }} style={{ width: '100%', height: 200, backgroundColor: '#fea' }} />
+                    <Image source={{ uri: 'data:image/png;base64,' + this.state.imagemMaquina }} style={{ width: '100%', height: 200, backgroundColor: '#fea' }} />
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.btnSubmit} onPress={() => { this.saveMaquina() }}>
-                    <Text style={styles.submitText}>Salvar</Text>
+                <TouchableOpacity style={styles.btnSubmit} onPress={() => { this.saveOrUpdateMaquina() }}>
+                    {this.state.id == 0
+                        ? <Text style={styles.submitText}>Salvar</Text>
+                        : <Text style={styles.submitText}>Atualizar</Text>
+                    }
+
                 </TouchableOpacity>
             </>
         )

@@ -59,14 +59,13 @@ export default class CameraView extends Component {
                     let num = substring  + 7
     
                     res = res.replace(res.substr(0, num), '')
-                }
-                if(Platform.OS === 'ios') {
+                } else {
                     res = result.base64
                 }
                 this.props.navigation.navigate(this.props.route.params?.previousScreen, { imagemMaquina: res })
                 this.props.route.params.onGoBack()
             }
-        };
+        }
 
         const { hasPermission } = this.state
         if (hasPermission === null) {

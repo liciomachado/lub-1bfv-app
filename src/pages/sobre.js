@@ -84,7 +84,7 @@ export default class Sobre extends Component {
                 }
                 <ScrollView style={{ backgroundColor: '#fff' }} >
                     <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"}>
-                        <View style={styles.background}>
+                        <TouchableOpacity style={styles.background} onPress={() => {this.props.navigation.navigate('NewMaquina', {maquina: this.state.maquina})}}>
                             <Text>Meu equipamento :</Text>
                             <Text>{this.state.maquina.nome}</Text>
 
@@ -92,7 +92,7 @@ export default class Sobre extends Component {
                                 <Image source={{ uri: "data:image/png;base64,"+this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} />
                             </View>
 
-                        </View>
+                        </TouchableOpacity>
                         <View style={styles.alinhamento}>
                             <Text>{this.state.maquina.descricao}</Text>
                             <Text style={{ fontSize: 18, fontWeight: "bold" }}>{"\n"}Horimetro: {this.state.maquina.horimetro} Horas acumuladas{"\n"}{"\n"}</Text>
