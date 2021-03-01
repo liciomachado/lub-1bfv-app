@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "projetoLub",
+    "name": "Lub1Bfv",
     "slug": "projetoLub",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -8,7 +8,7 @@
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#35AAFF"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -17,9 +17,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.bfv.lub1bfv"
     },
     "android": {
+      "package": "com.bfv.lub1bfv",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
