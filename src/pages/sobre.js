@@ -30,12 +30,15 @@ export default class Sobre extends Component {
         await this.setState({ showModalDetails: true })
     }
 
-    componentDidMount = () => {
+    componentDidMount = async () => {
         this._isMounted = true;
 
         let img = ''
-        axios.get(`${SERVER}/maquina/findbyid/${this.props.route.params.id}`).then(res => {
-            img = res.data.imagemMaquina
+        await AsyncStorage.getItem('imagemMaquina').then((res) => {
+            img = res;
+        })
+        //console.log(img);
+         axios.get(`${SERVER}/maquina/findbyid/${this.props.route.params.id}`).then(res => {
             this.setState({imagemMaquina: img})
             const maquina = res.data
             this.setState({ maquina })

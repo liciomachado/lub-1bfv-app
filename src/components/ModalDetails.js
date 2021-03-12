@@ -13,10 +13,10 @@ export default class ModalDetails extends Component {
     componentDidMount = async () => {
         let img = ""
         const id = parseInt(this.props.id)
-        const res = await axios.get(`${SERVER}/checagem/findbyid/${id}`)
+        const res = await axios.get(`${SERVER}/checagem/findbyidcomimagem/${id}`)
         img = res.data.imagemTroca
         this.setState({imagemTroca: img})
-        this.setState({ data: res.data })
+        this.setState({ data: res.data.checagem })
     }
 
     deleteChecagem = async () => {
@@ -52,8 +52,6 @@ export default class ModalDetails extends Component {
                             <Image source={{ uri: "data:image/png;base64," + this.state.imagemTroca,  scale: 1, cache: 'reload'  }} style={{ width: '100%', height: 200 }} />
                         </View>
                         <Text>{this.state.data.peca}</Text>
-
-                        <Text>{"\n"} {this.state.data.descricaoComplementar}</Text>
 
                         <Text style={{textAlign: 'justify', marginHorizontal: 10}}>{"\n"} {this.state.data.descricaoTroca}</Text>
                     </ScrollView>

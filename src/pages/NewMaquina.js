@@ -29,13 +29,20 @@ export default class NewMaquina extends Component {
 
     saveOrUpdateMaquina = async () => {
         try {
-            if(this.state.id != 0) {
+            if (this.state.id != 0) {
                 const res = await axios.put(`${SERVER}/maquina/update`, {
                     ...this.state
-                }) 
+                })
             } else {
                 const res = await axios.post(`${SERVER}/maquina/save`, {
-                    ...this.state
+                    imagemMaquina: this.state.imagemMaquina,
+                    maquina: {
+                        descricao: this.state.descricao,
+                        horimetro: this.state.horimetro,
+                        id: this.state.id,
+                        nome: this.state.nome,
+                        usuario: this.state.usuario
+                    }
                 })
             }
         } catch (error) {

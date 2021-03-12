@@ -32,6 +32,7 @@ export default class CameraView extends Component {
     takePicture = async () => {
         if (this.camera) {
             let photo = await this.camera.takePictureAsync({
+                quality: 0,
                 base64: true,
             });
             const res = photo.base64.replace('data:image/png;base64,', '')

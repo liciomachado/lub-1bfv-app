@@ -41,12 +41,16 @@ export default class Home extends Component {
 
 
 
-        axios.get(`${SERVER}/maquina/findbyid/${usuario.id}`)
+        axios.get(`${SERVER}/maquina/findimagemmaquina/${usuario.id}`)
             .then(result => {
-                this.setState({ maquina: result.data })
+                this.setState({ maquina: result.data.maquina })
                 img = result.data.imagemMaquina
+                
                 this.setState({ imagemMaquina: img })
-                this.setState({ trocas: result.data.trocas })
+                AsyncStorage.setItem('imagemMaquina', img);
+                AsyncStorage.setItem('nomeMaquina', result.data.maquina.nome);
+
+                this.setState({ trocas: result.data.maquina.trocas })
             })
             .catch(error => {
                 console.log(error.response)

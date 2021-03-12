@@ -14,7 +14,7 @@ export default class NewCheck extends Component {
         descricaoTroca: '',
         imagemTroca: '',
         maquina: {},
-        mostraImagemMaquina: this.props.route.params?.imagemMaquina ,
+        mostraImagemMaquina: this.props.route.params?.imagemMaquina,
     }
 
     componentDidMount = async () => {
@@ -26,12 +26,12 @@ export default class NewCheck extends Component {
         this.setState({ maquina: maquina.data })
 
         //ATUALIZA CHECAGEM
-        if(this.props.route.params?.id != 0) {
+        if (this.props.route.params?.id != 0) {
             const id = this.props.route.params?.id || 0
             const checagem = await axios.get(`${SERVER}/checagem/findbyid/${id}`)
             this.setState({ ...checagem.data })
             img = checagem.data.imagemTroca
-            this.setState({imagemTroca: img})
+            this.setState({ imagemTroca: img })
         }
     }
 
@@ -43,7 +43,16 @@ export default class NewCheck extends Component {
                 })
             } else {
                 const res = await axios.post(`${SERVER}/checagem/save`, {
-                    ...this.state
+                    imagemTroca: this.state.imagemTroca,
+                    checagem: {
+                        item: this.state.item,
+                        peca: this.state.peca,
+                        tempoTroca: this.state.tempoTroca,
+                        descricaoTroca: this.state.descricaoTroca,
+                        maquina: {
+                            id: this.state.maquina.id
+                        },
+                    }
                 })
             }
             this.props.navigation.navigate('Home')
@@ -95,7 +104,7 @@ export default class NewCheck extends Component {
 
                 <TouchableOpacity onPress={() => { this.props.navigation.navigate('Camera', { onGoBack: () => this.atualizaImagem(), previousScreen: 'NewCheck' }) }}>
                     <Text style={{ textAlign: 'center' }}>{"\n"}Imagem da peça</Text>
-                    <Image source={{ uri: "data:image/png;base64,"+this.state.imagemTroca }} style={{ width: '100%', height: 200, backgroundColor: '#fea' }} />
+                    <Image source={{ uri: "data:image/png;base64," + this.state.imagemTroca }} style={{ width: '100%', height: 200, backgroundColor: '#fea' }} />
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.btnSubmit} onPress={() => { this.saveOrUpdate() }}>
