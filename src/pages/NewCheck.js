@@ -3,6 +3,7 @@ import { Text, Image, TextInput, StyleSheet, TouchableOpacity, Alert } from 'rea
 import axios from 'axios'
 import { SERVER } from '../services/api'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { ScrollView } from 'react-native-gesture-handler'
 
 export default class NewCheck extends Component {
 
@@ -13,6 +14,7 @@ export default class NewCheck extends Component {
         tempoTroca: '',
         descricaoTroca: '',
         imagemTroca: '',
+        idImagem: '',
         maquina: {},
         mostraImagemMaquina: this.props.route.params?.imagemMaquina,
     }
@@ -22,15 +24,16 @@ export default class NewCheck extends Component {
         let res = await AsyncStorage.getItem('usuario_logado')
         const usuario = JSON.parse(res)
         this.setState({ usuario })
-        const maquina = await axios.get(`${SERVER}/maquina/findbyid/${usuario.id}`)
+        const maquina = await axios.get(`${SERVER}/maquina/findmaquina/${usuario.id}`)
         this.setState({ maquina: maquina.data })
 
         //ATUALIZA CHECAGEM
         if (this.props.route.params?.id != 0) {
             const id = this.props.route.params?.id || 0
-            const checagem = await axios.get(`${SERVER}/checagem/findbyid/${id}`)
-            this.setState({ ...checagem.data })
+            const checagem = await axios.get(`${SERVER}/checagem/findbyidcomimagem/${id}`)
+            this.setState({ ...checagem.data.checagem })
             img = checagem.data.imagemTroca
+            this.setState({ idImagem: checagem.data.id })
             this.setState({ imagemTroca: img })
         }
     }
@@ -39,7 +42,11 @@ export default class NewCheck extends Component {
         try {
             if (this.state.id != 0) {
                 const res = await axios.put(`${SERVER}/checagem/update`, {
-                    ...this.state
+                    id: this.state.idImagem,
+                    imagemTroca: this.state.imagemTroca,
+                    checagem: {
+                        ...this.state
+                    }
                 })
             } else {
                 const res = await axios.post(`${SERVER}/checagem/save`, {
@@ -69,7 +76,7 @@ export default class NewCheck extends Component {
 
     render() {
         return (
-            <>
+            <ScrollView>
                 <TextInput
                     style={styles.input}
                     placeholder="Item"
@@ -112,7 +119,7 @@ export default class NewCheck extends Component {
                         ? <Text style={styles.submitText}>Atualizar checagem</Text>
                         : <Text style={styles.submitText}>Salvar</Text>}
                 </TouchableOpacity>
-            </>
+            </ScrollView>
         )
     }
 }

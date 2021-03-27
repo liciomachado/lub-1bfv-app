@@ -4,6 +4,7 @@ import { Camera } from 'expo-camera';
 import * as ImagePicker from 'expo-image-picker';
 import * as Permissions from 'expo-permissions';
 import { FontAwesome, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
+import ImageResizer from 'react-native-image-resizer'
 
 export default class CameraView extends Component {
     state = {
@@ -32,9 +33,10 @@ export default class CameraView extends Component {
     takePicture = async () => {
         if (this.camera) {
             let photo = await this.camera.takePictureAsync({
-                quality: 0,
+                quality: 0.3,
                 base64: true,
             });
+
             const res = photo.base64.replace('data:image/png;base64,', '')
 
             this.props.navigation.navigate(this.props.route.params?.previousScreen, { imagemMaquina: res })
@@ -49,16 +51,16 @@ export default class CameraView extends Component {
                 allowsEditing: true,
                 aspect: [4, 3],
                 base64: true,
-                quality: 1,
+                quality: 0,
             });
 
             let res = ''
             if (!result.cancelled) {
-                if(Platform.OS === 'web') {
+                if (Platform.OS === 'web') {
                     res = result.uri
                     var substring = res.indexOf('base64');
-                    let num = substring  + 7
-    
+                    let num = substring + 7
+
                     res = res.replace(res.substr(0, num), '')
                 } else {
                     res = result.base64

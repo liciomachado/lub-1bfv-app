@@ -29,6 +29,8 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "description": "Projeto de controle de frota e lubrificação para projeto de TCC.",
+    "githubUrl": "https://github.com/liciomachado/lub-1bfv-api/tree/master"
   }
 }

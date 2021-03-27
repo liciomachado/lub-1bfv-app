@@ -43,14 +43,14 @@ export default class Home extends Component {
 
         axios.get(`${SERVER}/maquina/findimagemmaquina/${usuario.id}`)
             .then(result => {
-                this.setState({ maquina: result.data.maquina })
+                this.setState({ maquina: result.data })
                 img = result.data.imagemMaquina
                 
                 this.setState({ imagemMaquina: img })
                 AsyncStorage.setItem('imagemMaquina', img);
-                AsyncStorage.setItem('nomeMaquina', result.data.maquina.nome);
+                AsyncStorage.setItem('nomeMaquina', result.data.nome);
 
-                this.setState({ trocas: result.data.maquina.trocas })
+                this.setState({ trocas: result.data.trocas })
             })
             .catch(error => {
                 console.log(error.response)
@@ -106,7 +106,7 @@ export default class Home extends Component {
 
                 <TouchableOpacity style={styles.btnSubmit}
                     onPress={() => {
-                        this.props.navigation.navigate("Sobre", { id: this.state.usuario.id, imagemMaquina: this.state.imagemMaquina });
+                        this.props.navigation.navigate("Sobre", { maquina: this.state.maquina, imagemMaquina: this.state.imagemMaquina });
                     }}>
                     <Text style={styles.submitText}>Sobre sua maquina</Text>
                 </TouchableOpacity>

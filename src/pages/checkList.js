@@ -29,7 +29,7 @@ export default class CheckList extends Component {
         let u = await AsyncStorage.getItem('usuario_logado')
         const usuario = JSON.parse(u)
         this.setState({ usuario })
-        const res = await axios.get(`${SERVER}/maquina/findbyid/${usuario.id}`);
+        const res = await axios.get(`${SERVER}/maquina/findmaquina/${usuario.id}`);
         
         await AsyncStorage.getItem('imagemMaquina').then((res) => {
             img = res;
@@ -73,7 +73,7 @@ export default class CheckList extends Component {
                     <KeyboardAvoidingView behavior={Platform.OS == "ios" ? "padding" : "height"} style={styles.container}>
                         <View style={styles.background}>
                             <Text>Meu equipamento :</Text>
-                            <Text>Escavadeira ES-25</Text>
+                            <Text>{this.props.route.params.maquina.nome}</Text>
                             <TouchableOpacity>
                                 <View style={styles.containerLogo}>
                                     <Image source={{ uri: "data:image/png;base64," + this.state.imagemMaquina, scale: 1, cache: 'reload' }} style={{ backgroundColor: '#dee', width: 300, height: 200 }} />

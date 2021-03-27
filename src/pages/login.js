@@ -8,8 +8,8 @@ import axios from 'axios'
 import imageBackground from '../img/background.png'
 
 const initialParams = {
-    idtMilitar: '05072604722',
-    senha: '123321',
+    idtMilitar: '',
+    senha: '',
     nome: '',
     email: '',
 
